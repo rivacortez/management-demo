@@ -50,7 +50,7 @@ export default function SupplierInventoryComparisonPage() {
   // Selected product and suppliers offering it
   const [selectedProduct, setSelectedProduct] = useState<string>('')
   const [suppliersForProduct, setSuppliersForProduct] = useState<SupplierWithDetails[]>([])
-  const [recommendedSupplier, setRecommendedSupplier] = useState<SupplierWithDetails | null>(null)
+  const [recommendedSupplier, setRecommendedSupplier] = useState<SupplierWithDetails >(null)
   
   // Sorting
   const [sortField, setSortField] = useState<'cost_price' | 'lead_time_days' | 'recommendation_score'>('recommendation_score')
