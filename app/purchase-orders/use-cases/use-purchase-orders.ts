@@ -59,4 +59,8 @@ export class CancelPurchaseOrderUseCase extends BasePurchaseOrderUseCase {
     return this.cancelPurchaseOrder(id)
   }
 }
-
+export class DeletePurchaseOrderUseCase extends BasePurchaseOrderUseCase {
+  async execute(id: number): Promise<void> {
+    return this.purchaseOrderRepository.deletePurchaseOrder(id);
+  }
+}

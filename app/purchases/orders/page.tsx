@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, Filter, Eye, Edit, XCircle, Loader2, Calendar, DollarSign } from 'lucide-react'
+import { Search, Filter, Eye, Edit, XCircle, Trash2, Loader2, Calendar, DollarSign } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -17,17 +17,32 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PurchaseOrder } from '@/app/purchase-orders/domain/interfaces/purchase-orders'
 import { SupabasePurchaseOrderRepository } from '@/app/purchase-orders/repositories/supabase-purchase-order-repository'
 import { SupabaseSupplierRepository } from '@/app/management-suppliers/repositories/supabase-supplier-repository'
-import { GetPurchaseOrdersUseCase, CancelPurchaseOrderUseCase } from '@/app/purchase-orders/use-cases/use-purchase-orders'
+import {
+  GetPurchaseOrdersUseCase,
+  CancelPurchaseOrderUseCase,
+  DeletePurchaseOrderUseCase
+} from '@/app/purchase-orders/use-cases/use-purchase-orders'
 import { GetSuppliersUseCase } from '@/app/management-suppliers/use-cases/use-management-supplier'
 import { toast } from 'sonner'
 import PurchaseOrderDialog from '@/app/purchase-orders/dialogs/orders-add-dialog'
-import {formatPrice} from "@/lib/format-price";
+import { formatPrice } from "@/lib/format-price";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 // Initialize repositories and use cases
 const purchaseOrderRepository = new SupabasePurchaseOrderRepository()
 const supplierRepository = new SupabaseSupplierRepository()
 const getPurchaseOrdersUseCase = new GetPurchaseOrdersUseCase(purchaseOrderRepository)
 const cancelPurchaseOrderUseCase = new CancelPurchaseOrderUseCase(purchaseOrderRepository)
+const deletePurchaseOrderUseCase = new DeletePurchaseOrderUseCase(purchaseOrderRepository)
 const getSuppliersUseCase = new GetSuppliersUseCase(supplierRepository)
 
 // Helper functions for formatting
@@ -39,8 +54,6 @@ const formatDate = (dateString: string) => {
     day: 'numeric'
   })
 }
-
-
 
 // Status badge component
 const StatusBadge = ({ status }: { status: string }) => {
@@ -67,7 +80,10 @@ export default function PurchaseOrdersPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [cancellingOrderId, setCancellingOrderId] = useState<number | null>(null)
+  const [deletingOrderId, setDeletingOrderId] = useState<number | null>(null)
   const [isMobileView, setIsMobileView] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [orderToDelete, setOrderToDelete] = useState<number | null>(null)
 
   // Check window size on mount and resize
   useEffect(() => {
@@ -159,7 +175,35 @@ export default function PurchaseOrdersPage() {
     }
   }
 
+  // Open delete confirmation dialog
+  const openDeleteDialog = (orderId: number) => {
+    setOrderToDelete(orderId)
+    setShowDeleteDialog(true)
+  }
 
+  // Handle delete order
+  const handleDeleteOrder = async () => {
+    if (!orderToDelete) return
+
+    try {
+      setDeletingOrderId(orderToDelete)
+      await deletePurchaseOrderUseCase.execute(orderToDelete)
+
+      // Remove the order from state
+      setPurchaseOrders(prevOrders =>
+          prevOrders.filter(order => order.id !== orderToDelete)
+      )
+
+      toast.success(`La orden #${orderToDelete} ha sido eliminada exitosamente.`)
+    } catch (err) {
+      console.error('Error deleting order:', err)
+      toast.error("No se pudo eliminar la orden. Por favor, intente de nuevo.")
+    } finally {
+      setDeletingOrderId(null)
+      setShowDeleteDialog(false)
+      setOrderToDelete(null)
+    }
+  }
 
   // Actions component for reuse
   const OrderActions = ({ order }: { order: PurchaseOrder & { supplier_name: string } }) => (
@@ -194,11 +238,48 @@ export default function PurchaseOrdersPage() {
               )}
             </Button>
         )}
+
+        <Button
+            variant="ghost"
+            size="icon"
+            title="Eliminar orden"
+            onClick={() => openDeleteDialog(order.id)}
+            disabled={deletingOrderId === order.id}
+            className="h-8 w-8"
+        >
+          {deletingOrderId === order.id ? (
+              <Loader2 size={16} className="animate-spin text-red-500" />
+          ) : (
+              <Trash2 size={16} className="text-red-500" />
+          )}
+        </Button>
       </div>
   )
 
   return (
       <div className="space-y-6">
+        {/* Delete confirmation dialog */}
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>¿Eliminar orden de compra?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta acción no se puede deshacer. Se eliminará permanentemente la orden de compra
+                y todos sus detalles asociados.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                  onClick={handleDeleteOrder}
+                  className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Eliminar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
           <h1 className="text-2xl font-bold tracking-tight">Órdenes de Compra</h1>
           <PurchaseOrderDialog />
