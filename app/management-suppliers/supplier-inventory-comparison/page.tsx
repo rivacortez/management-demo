@@ -50,7 +50,7 @@ export default function SupplierInventoryComparisonPage() {
   // Selected product and suppliers offering it
   const [selectedProduct, setSelectedProduct] = useState<string>('')
   const [suppliersForProduct, setSuppliersForProduct] = useState<SupplierWithDetails[]>([])
-  const [recommendedSupplier, setRecommendedSupplier] = useState<SupplierWithDetails >(null)
+  const [recommendedSupplier, setRecommendedSupplier] = useState<SupplierWithDetails | null>(null)
   
   // Sorting
   const [sortField, setSortField] = useState<'cost_price' | 'lead_time_days' | 'recommendation_score'>('recommendation_score')
@@ -457,8 +457,7 @@ export default function SupplierInventoryComparisonPage() {
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline" className="bg-emerald-100 text-emerald-900 border-slate-200  ">
-
-                                {formatPrice(recommendedSupplier.cost_price)}
+                                {formatPrice(supplier.cost_price)}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -522,8 +521,7 @@ export default function SupplierInventoryComparisonPage() {
                                   Precio:
                                 </div>
                                 <Badge variant="outline" className="mt-1 bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-950 dark:text-slate-300 dark:border-slate-800">
-
-                                  {formatPrice(recommendedSupplier.cost_price)}
+                                  {formatPrice(supplier.cost_price)}
                                 </Badge>
                               </div>
                               <div>
