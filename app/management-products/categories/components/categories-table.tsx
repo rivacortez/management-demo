@@ -445,7 +445,7 @@ export function CategoriesTable() {
                         <ArrowUpDown className="h-3.5 w-3.5 text-muted-foreground" />
                       </div>
                     </TableHead>
-                    <TableHead className="min-w-[180px]">Slug</TableHead>
+                    <TableHead className="min-w-[180px]"></TableHead>
                     <TableHead className="w-[100px] text-center">Estado</TableHead>
                     <TableHead className="w-[100px] text-center">Acciones</TableHead>
                   </TableRow>

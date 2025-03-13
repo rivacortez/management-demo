@@ -23,6 +23,7 @@ import { ProductSupplier } from '../domain/interfaces/product-supplier'
 import { SupabaseProductSupplierRepository } from '../repositories/supabase-product-supplier-repository'
 import { SupabaseSupplierRepository } from '../repositories/supabase-supplier-repository'
 import { SupabaseProductRepository } from '../repositories/supabase-product-repository'
+import { formatPrice } from '@/lib/format-price'
 
 // Extended interface to include supplier details and recommendation score
 interface SupplierWithDetails extends ProductSupplier {
@@ -340,7 +341,7 @@ export default function SupplierInventoryComparisonPage() {
                           variant="outline"
                           className="text-lg  bg-emerald-100 text-emerald-700 "
                         >
-                          ${recommendedSupplier.cost_price.toFixed(2)}
+                          {formatPrice(recommendedSupplier.cost_price)}
                         </Badge>
                       </div>
                       
@@ -456,7 +457,8 @@ export default function SupplierInventoryComparisonPage() {
                             </TableCell>
                             <TableCell>
                               <Badge variant="outline" className="bg-emerald-100 text-emerald-900 border-slate-200  ">
-                                ${supplier.cost_price.toFixed(2)}
+
+                                {formatPrice(recommendedSupplier.cost_price)}
                               </Badge>
                             </TableCell>
                             <TableCell>
@@ -520,7 +522,8 @@ export default function SupplierInventoryComparisonPage() {
                                   Precio:
                                 </div>
                                 <Badge variant="outline" className="mt-1 bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-950 dark:text-slate-300 dark:border-slate-800">
-                                  ${supplier.cost_price.toFixed(2)}
+
+                                  {formatPrice(recommendedSupplier.cost_price)}
                                 </Badge>
                               </div>
                               <div>

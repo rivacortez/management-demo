@@ -4,7 +4,7 @@ import { memo, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Tag, Calendar, CheckCircle2, XCircle, Link2 } from "lucide-react";
+import { Edit, Trash2, Tag, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import { Category } from "../../domain/interfaces/categories";
 import { ProductImage } from "@/components/product-image";
 
@@ -63,10 +63,7 @@ function CategoryCardComponent({ category, onEdit, onDelete }: CategoryCardProps
             <span className="line-clamp-1">{category.category_name}</span>
           </CardTitle>
           
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Link2 className="h-3.5 w-3.5 text-primary/70" />
-            <span className="line-clamp-1">{category.category_slug}</span>
-          </div>
+
         </div>
       </CardHeader>
       

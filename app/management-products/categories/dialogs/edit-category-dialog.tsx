@@ -84,17 +84,7 @@ export function EditCategoryDialog({
               />
             </div>
             {/* Slug */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="category_slug" className="text-right">
-                Slug
-              </Label>
-              <Input
-                  id="category_slug"
-                  value={category.category_slug}
-                  onChange={(e) => onInputChange("category_slug", e.target.value)}
-                  className="col-span-3"
-              />
-            </div>
+
             {/* Estado */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">Estado</Label>

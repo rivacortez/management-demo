@@ -132,19 +132,7 @@ export function CategoryForm({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="category_slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Slug</FormLabel>
-              <FormControl>
-                <Input placeholder="ingrese-el-slug" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
 
         <FormField
           control={form.control}
