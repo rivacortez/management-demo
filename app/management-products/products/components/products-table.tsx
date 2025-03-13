@@ -293,7 +293,7 @@ export function ProductsTable() {
     if (!editingProduct) return;
     try {
       const path = imageUrl.replace(
-          process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL!,
+          "https://idpesfrwikdnugdufvfr.supabase.co/storage/v1/object/public/management-demo/",
           ""
       );
       await deleteImage(path);

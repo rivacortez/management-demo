@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, Package, Grid3X3, LayoutDashboard, Settings, Users, FileText, Bell, ChevronRight } from "lucide-react"
+import { Menu, Package, Grid3X3, Settings, Users, FileText, Bell, ChevronRight } from "lucide-react"
 import { UserProfileMenu } from "@/components/ui/user-profile-menu"
 
 export function Navbar({ children }: { children?: React.ReactNode }) {
@@ -22,7 +22,7 @@ export function Navbar({ children }: { children?: React.ReactNode }) {
   }, [])
 
   const menuItems = [
-    { name: "Dashboard", icon: LayoutDashboard, href: "/dashboard", section: "Principal" },
+    //{ name: "Dashboard", icon: LayoutDashboard, href: "/dashboard", section: "Principal" },
     { name: "Productos", icon: Package, href: "/management-products/products", section: "Gestión" },
     { name: "Categorías", icon: Grid3X3, href: "/management-products/categories", section: "Gestión" },
     { name: "Proveedores", icon: Users, href: "/management-suppliers/supplier-list", section: "Gestión" },
@@ -57,9 +57,7 @@ export function Navbar({ children }: { children?: React.ReactNode }) {
                 href="/"
                 className="relative font-bold text-xl group overflow-hidden px-3 py-2"
               >
-                <span className="relative z-10 bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-400 dark:to-primary-300 bg-clip-text text-transparent">
-                  Ferretería
-                </span>
+
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-600 to-primary-400 group-hover:w-full transition-all duration-300"></span>
               </Link>
             </div>
